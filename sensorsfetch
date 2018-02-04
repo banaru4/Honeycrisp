@@ -1,0 +1,83 @@
+// This #include statement was automatically added by the Particle IDE.
+#include <Adafruit_DHT.h>
+#include "cellular_hal.h"
+#include "math.h"
+
+// Set the TELUS APN
+STARTUP(cellular_credentials_set("isp.telus.com", "", "", NULL));
+
+// Define Pins
+    #define DHTPIN 1     // what pin we're connected to
+
+// Setup Sensor
+    #define DHTTYPE DHT22		// DHT 22 (AM2302)
+
+    DHT dht(DHTPIN, DHTTYPE);
+    
+    double tempf;
+    double tempc;
+    double humidity;
+    double gasOutside1;
+    double gasOutside2;
+    bool movement;
+    double sound;
+    int oldMotionValue = 0;
+    
+void setup() 
+{
+    // Set the keep-alive value for TELUS SIM card
+    Particle.keepAlive(30);
+    
+	Serial.begin(9600);
+	
+	Particle.variable("tempf", &tempf, DOUBLE);
+	Particle.variable("tempc", &tempc, DOUBLE);
+	Particle.variable("humidity", &humidity, DOUBLE);
+	Particle.variable("gasOutside1", &gasOutside1, DOUBLE);
+	Particle.variable("gasOutside2", &gasOutside2, DOUBLE);
+	Particle.variable("movement", &movement, BOOLEAN);
+	Particle.variable("sound", &sound, DOUBLE);
+
+    dht.begin();		// Startup the sensor
+}
+
+void loop(){
+/*
+    if(1==1){
+        char* num={'+','1','4','3','8','9','9','2','4','1','0','1'};
+        char* buf={'H','E','L','L','O'};
+        smsSend(num,buf);
+    }*/
+    // hold up    
+    delay(2000); // let everything power up for a bit
+    
+// grab some data
+    humidity = dht.getHumidity();
+    tempf = dht.getTempFarenheit();
+    tempc = dht.getTempCelcius();
+    float dewptc = dht.getDewPoint();
+    float dewptf = (dewptc* 9 / 5 + 32);
+    
+    int sensorValue1 = analogRead(D3);
+    gasOutside1=(double)sensorValue1/1024*5.0;
+    
+    int sensorValue2 = analogRead(D4);
+    gasOutside2=(double)sensorValue2/1024*5.0;
+    
+    analogRead(D6);
+    delay(10);
+    sound = analogRead(D6);
+    
+    
+    int newMotionValue = analogRead(D5);
+    if(abs(oldMotionValue - newMotionValue) > 10){
+        movement = true;
+    } else {
+        movement = false;
+    }
+    
+    oldMotionValue = newMotionValue;
+    
+    //Hold up    
+delay(1000);
+}
