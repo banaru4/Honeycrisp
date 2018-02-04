@@ -1,3 +1,4 @@
+
 #Honeycrisp
 
 #Team
@@ -29,9 +30,13 @@ Future developments to improve our device further would include:
 1. Considering sensors with more precision to ensure that the conditions and parameters being monitored are as precise as required.
 2. Implement multiple emergency measures, in the case where reaching the owner becomes difficult or the conditions within the vehicle 
    have reached alarming levels:
+   
     a. Turning on the A/C of the vehicle
+    
     b. Cracking the window slightly open for better circulation.
+    
     c. Have the vehicle make noise (either via the alarm system or car horn) to gain the attention of any 
         passerby or individuals within reasonable distances to call for aid.
+        
     d. Function that reports the incidence to 911, along with the location of the vehicle. 
 
